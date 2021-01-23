@@ -33,3 +33,5 @@ yarn-error.log*
 
 # database
 /blog-data/
+/tmp/
+/temp/
