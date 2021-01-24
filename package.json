@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev & npm run typeorm:start",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "typeorm:start": "babel -w ./src --out-dir dist --extensions \".ts,.tsx\"",
+    "migration:run": "typeorm migration:run",
+    "migration:revert": "typeorm migration:revert"
   },
   "dependencies": {
     "axios": "^0.19.2",
