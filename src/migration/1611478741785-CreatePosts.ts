@@ -1,17 +1,17 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class CreatePost1611399132285 implements MigrationInterface {
+export class CreatePosts1611478741785 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    return await queryRunner.createTable(
+    await queryRunner.createTable(
       new Table({
         name: "posts",
         columns: [
           {
             name: "id",
-            type: "int",
-            isPrimary: true,
             isGenerated: true,
+            type: "int",
             generationStrategy: "increment",
+            isPrimary: true,
           },
           {
             name: "title",
@@ -21,12 +21,16 @@ export class CreatePost1611399132285 implements MigrationInterface {
             name: "content",
             type: "text",
           },
+          {
+            name: "author_id",
+            type: "int",
+          },
         ],
       })
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    return await queryRunner.dropTable("posts");
+      await queryRunner.dropTable("posts");
   }
 }
