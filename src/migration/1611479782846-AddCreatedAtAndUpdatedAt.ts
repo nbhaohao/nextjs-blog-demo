@@ -9,13 +9,13 @@ export class AddCreatedAtAndUpdatedAt1611479782846
         queryRunner.addColumns(tableName, [
           new TableColumn({
             name: "created_at",
-            type: "time",
+            type: "timestamp",
             isNullable: false,
             default: "now()",
           }),
           new TableColumn({
             name: "updated_at",
-            type: "time",
+            type: "timestamp",
             isNullable: false,
             default: "now()",
           }),
