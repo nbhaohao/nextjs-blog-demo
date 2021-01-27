@@ -1,14 +1,23 @@
 import { createConnection, getConnectionManager } from "typeorm";
+import "reflect-metadata";
+import { Post } from "../src/entity/Post";
+import { User } from "../src/entity/User";
+import { Comment } from "../src/entity/Comment";
+import ormConfig from "../ormconfig.json";
 
 const getConnectionPromise = (async function () {
   const manager = getConnectionManager();
   if (manager.has("default")) {
     const defaultConnection = manager.get("default");
     if (defaultConnection.isConnected) {
-      return defaultConnection;
+      await defaultConnection.close();
     }
   }
-  return createConnection();
+  // @ts-ignore
+  return createConnection({
+    ...ormConfig,
+    entities: [Post, User, Comment],
+  });
 })();
 
 const getDatabaseConnection = async () => {
