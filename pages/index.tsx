@@ -9,10 +9,9 @@ type Props = {
 };
 const index: NextPage<Props> = (props) => {
   const { posts } = props;
-  console.log(posts);
   return (
     <div>
-      <h1>文章列表</h1>
+      <h1>文章列表123</h1>
       {posts.map((post) => {
         return (
           <Link href={`/posts/${post.id}`} key={post.id}>

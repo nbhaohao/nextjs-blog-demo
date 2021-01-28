@@ -1,6 +1,4 @@
-import {GetStaticProps, NextPage} from 'next';
-import {usePosts} from '../../hooks/usePosts';
-import {useCallback} from 'react';
+import {NextPage} from 'next';
 import {getPosts} from '../../lib/posts';
 import Link from 'next/link';
 
