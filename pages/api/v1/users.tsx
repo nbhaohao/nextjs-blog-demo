@@ -14,46 +14,19 @@ const createErrors = (
   res.end();
 };
 
-interface Errors {
-  username: string[];
-  password: string[];
-  password_confirmation: string[];
-}
-
 const Users: NextApiHandler = async (req, res) => {
   const { username, password, password_confirmation } = req.body;
-
-  const errors: Errors = {
-    username: [],
-    password: [],
-    password_confirmation: [],
-  };
-  if (username.trim() === "") {
-    errors.username.push("不能为空");
-  }
-  if (!/[a-zA-Z0-9]/.test(username.trim())) {
-    errors.username.push("格式不合法");
-  }
-  if (username.trim().length > 42) {
-    errors.username.push("太长");
-  }
-  if (username.trim().length <= 3) {
-    errors.username.push("太短");
-  }
-  if (password === "") {
-    errors.password.push("不能为空");
-  }
-  if (password !== password_confirmation) {
-    errors.password_confirmation.push("密码不匹配");
-  }
-  if (Object.values(errors).some((errors) => errors.length > 0)) {
-    createErrors(res, 422, errors);
+  const user = new User();
+  user.username = username;
+  user.password = password;
+  user.password_confirmation = password_confirmation;
+  await user.validate();
+  if (user.hasErrors()) {
+    createErrors(res, 422, user.errors);
     return;
   } else {
-    const connection = await getDatabaseConnection();
-    const user = new User();
-    user.username = username.trim();
     user.password_digest = md5(password);
+    const connection = await getDatabaseConnection();
     await connection.manager.save(user);
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json; charset=utf8");
