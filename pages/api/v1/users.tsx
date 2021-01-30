@@ -25,13 +25,11 @@ const Users: NextApiHandler = async (req, res) => {
     createErrors(res, 422, user.errors);
     return;
   } else {
-    user.password_digest = md5(password);
     const connection = await getDatabaseConnection();
     await connection.manager.save(user);
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json; charset=utf8");
-    const { password_digest, ...exclude_password_digest_user } = user;
-    res.write(JSON.stringify(exclude_password_digest_user));
+    res.write(JSON.stringify(user));
     res.end();
   }
 };

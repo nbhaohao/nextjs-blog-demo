@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -9,6 +10,7 @@ import {
 import { Post } from "./Post";
 import { Comment } from "./Comment";
 import { getDatabaseConnection } from "../../lib/getDatabaseConnection";
+import md5 from "md5";
 
 interface Errors {
   username: string[];
@@ -42,6 +44,11 @@ export class User {
     password_confirmation: [],
   };
 
+  toJSON() {
+    const { id, username, comments, posts, created_at, updated_at } = this;
+    return { id, username, comments, posts, created_at, updated_at };
+  }
+
   async validate() {
     const { username, password, password_confirmation, errors } = this;
     if (username.trim() === "") {
@@ -73,5 +80,10 @@ export class User {
   hasErrors() {
     const { errors } = this;
     return Object.values(errors).some((errors) => errors.length > 0);
+  }
+
+  @BeforeInsert()
+  generatePasswordDigest() {
+    this.password_digest = md5(this.password);
   }
 }
