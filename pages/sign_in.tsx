@@ -1,29 +1,20 @@
 import React, { useState } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { GetServerSideProps, NextPage } from "next";
+import axios, { AxiosResponse } from "axios";
+import { NextPage } from "next";
 
 interface FormData {
   username: string;
   password: string;
-  password_confirmation: string;
 }
 
-interface Errors {
-  username: string[];
-  password: string[];
-  password_confirmation: string[];
-}
-
-const SignUp: NextPage = () => {
+const SignIn: NextPage = () => {
   const [signUpData, setSignUpData] = useState<FormData>({
     username: "",
     password: "",
-    password_confirmation: "",
   });
   const [errors, setErrors] = useState({
     username: [],
     password: [],
-    password_confirmation: [],
   });
   const onUpdateSignUpData = (payload: Partial<FormData>) => {
     setSignUpData({
@@ -34,16 +25,16 @@ const SignUp: NextPage = () => {
   const onSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
     console.log(signUpData);
-    axios.post("/api/v1/users", signUpData).then(
+    axios.post("/api/v1/sessions", signUpData).then(
       () => {
-        window.alert("注册成功");
-        window.location.href = "/sign_in";
+        window.alert("登录成功");
+        // window.location.href = "/sign_in";
       },
       (error) => {
         const response: AxiosResponse = error.response;
         if (response) {
           if (response.status === 422) {
-            setErrors({ ...errors, ...response.data });
+            setErrors(response.data);
           }
         }
       }
@@ -57,7 +48,7 @@ const SignUp: NextPage = () => {
   };
   return (
     <>
-      <h1>注册</h1>
+      <h1>登录</h1>
       <form onSubmit={onSubmit}>
         <div>
           <label>
@@ -86,21 +77,6 @@ const SignUp: NextPage = () => {
           {renderError("password")}
         </div>
         <div>
-          <label>
-            确认密码
-            <input
-              type="password"
-              value={signUpData.password_confirmation}
-              onChange={(event) => {
-                onUpdateSignUpData({
-                  password_confirmation: event.target.value,
-                });
-              }}
-            />
-          </label>
-          {renderError("password_confirmation")}
-        </div>
-        <div>
           <button type="submit">注册</button>
         </div>
       </form>
@@ -108,4 +84,4 @@ const SignUp: NextPage = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
