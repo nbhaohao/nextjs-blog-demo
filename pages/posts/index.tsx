@@ -1,6 +1,7 @@
 import {NextPage} from 'next';
 import {getPosts} from '../../lib/posts';
 import Link from 'next/link';
+import {Post} from "../../next-env";
 
 type Props = {
   posts: Post[];

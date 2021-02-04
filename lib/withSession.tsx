@@ -6,7 +6,7 @@ function withSession(handler: NextApiHandler): any;
 function withSession(handler: NextApiHandler | GetServerSideProps) {
   return withIronSession(handler, {
     // password: process.env.SECRET_COOKIE_PASSWORD,
-    password: "4fe8cef7-355a-4a33-aab4-3737797f3d60",
+    password: process.env.SECRET,
     cookieName: "blog",
     cookieOptions: {
       secure: false,
