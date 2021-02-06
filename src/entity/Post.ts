@@ -19,7 +19,7 @@ export class Post {
   title: string;
   @Column("text")
   content: string;
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne("User", "posts")
   @JoinColumn({ name: "author_id" })
   author: User;
   @OneToMany(() => Comment, (comment) => comment.post)

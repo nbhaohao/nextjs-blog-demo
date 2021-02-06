@@ -1,10 +1,10 @@
 import { NextPage } from "next";
 import React from "react";
 import { useForm } from "../../hooks/useForm";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 const PostsNew: NextPage = () => {
-  const { form, setErrors } = useForm({
+  const { form } = useForm({
     initFormData: {
       title: "",
       content: "",
@@ -21,21 +21,9 @@ const PostsNew: NextPage = () => {
         type: "textarea",
       },
     ],
-    onSubmit: (formData) => {
-      axios.post("/api/v1/posts", formData).then(
-        () => {
-          window.alert("提交成功");
-          // window.location.href = "/sign_in";
-        },
-        (error) => {
-          const response: AxiosResponse = error.response;
-          if (response) {
-            if (response.status === 422) {
-              setErrors(response.data);
-            }
-          }
-        }
-      );
+    submit: {
+      request: (formData) => axios.post("/api/v1/posts", formData),
+      message: "提交成功",
     },
     buttons: <button type="submit">提交</button>,
   });

@@ -1,4 +1,5 @@
 import React, { ReactChild, useCallback, useState } from "react";
+import { AxiosResponse } from "axios";
 
 interface Field<T> {
   label: string;
@@ -13,14 +14,17 @@ type UpdateFieldPayload<T> = {
 type UseFormParams<T> = {
   initFormData: T;
   fields: Field<T>[];
-  onSubmit: (formData: T) => void;
   buttons: ReactChild;
+  submit: {
+    request: (formData: T) => Promise<T>;
+    message: string;
+  };
 };
 
 export function useForm<T extends { [key: string]: number | string }>({
   initFormData,
   fields,
-  onSubmit,
+  submit,
   buttons,
 }: UseFormParams<T>) {
   const [formData, setFormData] = useState<T>(initFormData);
@@ -45,9 +49,22 @@ export function useForm<T extends { [key: string]: number | string }>({
   const _onSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      onSubmit(formData);
+      submit.request(formData).then(
+        () => {
+          window.alert(submit.message);
+          // window.location.href = "/sign_in";
+        },
+        (error) => {
+          const response: AxiosResponse = error.response;
+          if (response) {
+            if (response.status === 422) {
+              setErrors(response.data);
+            }
+          }
+        }
+      );
     },
-    [onSubmit, formData]
+    [submit, formData]
   );
   const form = (
     <form onSubmit={_onSubmit}>
@@ -86,6 +103,5 @@ export function useForm<T extends { [key: string]: number | string }>({
   );
   return {
     form,
-    setErrors,
   };
 }

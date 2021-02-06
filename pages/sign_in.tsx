@@ -1,5 +1,5 @@
 import React from "react";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
 import { withSession } from "../lib/withSession";
 import { User } from "../src/entity/User";
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const SignIn: NextPage<Props> = ({ user }) => {
-  const { form, setErrors } = useForm({
+  const { form } = useForm({
     initFormData: {
       username: "",
       password: "",
@@ -27,21 +27,9 @@ const SignIn: NextPage<Props> = ({ user }) => {
         key: "password",
       },
     ],
-    onSubmit: (formData) => {
-      axios.post("/api/v1/sessions", formData).then(
-        () => {
-          window.alert("登录成功");
-          // window.location.href = "/sign_in";
-        },
-        (error) => {
-          const response: AxiosResponse = error.response;
-          if (response) {
-            if (response.status === 422) {
-              setErrors(response.data);
-            }
-          }
-        }
-      );
+    submit: {
+      request: (formData) => axios.post("/api/v1/sessions", formData),
+      message: "登录成功",
     },
     buttons: <button type="submit">注册</button>,
   });
