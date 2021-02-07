@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
+import q from "query-string";
 import { GetServerSideProps, NextPage } from "next";
 import { withSession } from "../lib/withSession";
 import { User } from "../src/entity/User";
@@ -10,6 +12,7 @@ interface Props {
 }
 
 const SignIn: NextPage<Props> = ({ user }) => {
+  const router = useRouter();
   const { form } = useForm({
     initFormData: {
       username: "",
@@ -29,9 +32,15 @@ const SignIn: NextPage<Props> = ({ user }) => {
     ],
     submit: {
       request: (formData) => axios.post("/api/v1/sessions", formData),
-      message: "登录成功",
+      success: () => {
+        window.alert("登录成功");
+        const { return_to } = q.parse(location.search);
+        if (return_to) {
+          router.push(return_to.toString());
+        }
+      },
     },
-    buttons: <button type="submit">注册</button>,
+    buttons: <button type="submit">登录</button>,
   });
   return (
     <>

@@ -17,7 +17,7 @@ type UseFormParams<T> = {
   buttons: ReactChild;
   submit: {
     request: (formData: T) => Promise<T>;
-    message: string;
+    success: () => void;
   };
 };
 
@@ -51,7 +51,7 @@ export function useForm<T extends { [key: string]: number | string }>({
       e.preventDefault();
       submit.request(formData).then(
         () => {
-          window.alert(submit.message);
+          submit.success();
           // window.location.href = "/sign_in";
         },
         (error) => {
@@ -59,6 +59,11 @@ export function useForm<T extends { [key: string]: number | string }>({
           if (response) {
             if (response.status === 422) {
               setErrors(response.data);
+            } else if (response.status === 401) {
+              window.alert("请先登录");
+              window.location.href = `/sign_in?return_to=${encodeURIComponent(
+                window.location.pathname
+              )}`;
             }
           }
         }
