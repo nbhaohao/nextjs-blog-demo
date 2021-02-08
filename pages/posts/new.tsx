@@ -2,8 +2,10 @@ import { NextPage } from "next";
 import React from "react";
 import { useForm } from "../../hooks/useForm";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const PostsNew: NextPage = () => {
+  const router = useRouter();
   const { form } = useForm({
     initFormData: {
       title: "",
@@ -23,7 +25,10 @@ const PostsNew: NextPage = () => {
     ],
     submit: {
       request: (formData) => axios.post("/api/v1/posts", formData),
-      success: () => alert("提交成功")
+      success: () => {
+        alert("提交成功");
+        router.push("/posts");
+      },
     },
     buttons: <button type="submit">提交</button>,
   });
