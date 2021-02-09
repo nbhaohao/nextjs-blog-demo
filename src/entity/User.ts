@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { Post } from "./Post";
 import { Comment } from "./Comment";
-import { getDatabaseConnection } from "../../lib/getDatabaseConnection";
+// import { getDatabaseConnection } from "../../lib/getDatabaseConnection";
 import md5 from "md5";
 
 interface Errors {
@@ -63,13 +63,13 @@ export class User {
     if (username.trim().length <= 3) {
       errors.username.push("太短");
     }
-    const connection = await getDatabaseConnection();
-    const find = await connection.manager.findOne(User, {
-      where: { username: username.trim() },
-    });
-    if (find) {
-      errors.username.push("用户名重复");
-    }
+    // const connection = await getDatabaseConnection();
+    // const find = await connection.manager.findOne(User, {
+    //   where: { username: username.trim() },
+    // });
+    // if (find) {
+    //   errors.username.push("用户名重复");
+    // }
     if (password === "") {
       errors.password.push("不能为空");
     }
