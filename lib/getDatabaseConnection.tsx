@@ -16,6 +16,7 @@ const getConnectionPromise = (async function () {
   // @ts-ignore
   return createConnection({
     ...ormConfig,
+    host: process.env.NODE_ENV === "production" ? "localhost" : "192.168.2.11",
     entities: [Post, User, Comment],
   });
 })();
