@@ -10,7 +10,8 @@
     "migration:run": "typeorm migration:run",
     "migration:revert": "typeorm migration:revert",
     "migration:create": "typeorm migration:create",
-    "entity:create": "typeorm entity:create"
+    "entity:create": "typeorm entity:create",
+    "docker:build": "yarn build && docker build -t nbhaohao/node-web-app ."
   },
   "dependencies": {
     "@types/lodash": "^4.14.168",

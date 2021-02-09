@@ -15,3 +15,7 @@ yarn build
 yarn start
 ```
 
+## Docker run
+```bash
+docker run -p 3000:3000 -d nbhaohao/node-web-app
+```
